@@ -1,0 +1,25 @@
+# config file for NoteblockMusicPlayer plugin
+# author: opplaypro
+
+regions:
+  # here put WorldGuard regions
+  'spawn':
+    # list of songs to be played when player is in that region
+    # all *.nbs files must be in plugins/NoteblockMusicPlayer/songs
+    songs:
+      - 'village.nbs'
+      - 'ambient.nbs'
+
+    # true if you want to loop through all songs (recommended true, default true)
+    loop: true
+    # true if you want to shuffle played songs (recommended true, default true)
+    shuffle: true
+
+  # second configured region
+  'pvp_arena':
+    songs:
+      - 'fight.nbs'
+      - 'arena_ambient.nbs'
+
+    loop: true
+    shuffle: true

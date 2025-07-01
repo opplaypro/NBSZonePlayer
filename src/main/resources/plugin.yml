@@ -1,0 +1,9 @@
+name: NBSZonePlayer
+main: com.github.opplaypro.nbszoneplayer.NBSZonePlayer
+version: ${project.version}
+description: Play your own music on the server!
+author: opplaypro
+depend:
+  - NoteBlockAPI
+  - WorldGuard
+api-version: 1.21
