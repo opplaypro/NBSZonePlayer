@@ -2,6 +2,7 @@ package com.github.opplaypro.nbszoneplayer;
 
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.session.SessionManager;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -49,6 +50,13 @@ public final class NBSZonePlayer extends JavaPlugin {
             return;
         }
 
+        PluginCommand command = getCommand("nbszoneplayer");
+        if (command != null) {
+            command.setExecutor(new CommandManager(this));
+        } else {
+            getLogger().severe("cannot find command 'nbszoneplayer', check config.yml.");
+        }
+
         loadPlaylists();
         getLogger().info("NoteblockMusicPlayer successfully enabled!");
     }
@@ -58,7 +66,7 @@ public final class NBSZonePlayer extends JavaPlugin {
         getLogger().info("Disabling NoteblockMusicPlayer");
     }
 
-    private void loadPlaylists() {
+    public void loadPlaylists() {
         regionPlaylists.clear();
 
         File songsFolder = new File(getDataFolder(), "songs");
@@ -87,6 +95,10 @@ public final class NBSZonePlayer extends JavaPlugin {
 
             boolean shuffle = regionSelection.getBoolean(path + "shuffle", true);
             boolean loop = regionSelection.getBoolean(path + "loop", true);
+            int volumeInt = regionSelection.getInt(path + "volume", 100);
+
+            if (volumeInt < 0) volumeInt = 0;
+            if (volumeInt > 100) volumeInt = 100;
 
             if (songFileNames.isEmpty()) {
                 getLogger().warning("No songs specified in region: "  + regionName);
@@ -108,11 +120,11 @@ public final class NBSZonePlayer extends JavaPlugin {
                 continue;
             }
 
-            RegionPlaylist playlist = new RegionPlaylist(foundSongs, shuffle, loop);
+            RegionPlaylist playlist = new RegionPlaylist(foundSongs, shuffle, loop, (byte) volumeInt);
             this.regionPlaylists.put(regionName, playlist);
 
-            getLogger().info(String.format("Loaded region '%s': %d/%d songs, shuffle: %b, loop: %b",
-                    regionName, foundSongs.size(), songFileNames.size(), shuffle, loop));
+            getLogger().info(String.format("Loaded region '%s': %d/%d songs, shuffle: %b, loop: %b, volume: %d%%",
+                    regionName, foundSongs.size(), songFileNames.size(), shuffle, loop, volumeInt));
         }
         getLogger().info("Finished loading playlists");
     }
