@@ -40,20 +40,3 @@ public class CommandManager implements CommandExecutor {
         return true;
     }
 }
-
-/*
-
-if (args.length >0) {
-            if (args[0].equalsIgnoreCase("reload")) {
-
-                plugin.reloadConfig();
-                plugin.loadPlaylists();
-
-                sender.sendMessage("§aPlugin successfully reloaded!");
-                return true;
-            }
-        }
-
-        sender.sendMessage("§cUse /" + label + " reload to reload!");
-        return true;
- */
