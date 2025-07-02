@@ -67,7 +67,7 @@ public class RegionEnterHandler extends Handler {
 
                 String currentSongFileName = currentSongPlayer.getSong().getPath().getName();
 
-                if (!highestPriorityPlaylist.getSongs().contains(currentSongFileName)) {
+                if (!highestPriorityPlaylist.songs().contains(currentSongFileName)) {
                     musicManager.startPlaylist(bukkitPlayer, highestPriorityPlaylist);
                 }
             } else {

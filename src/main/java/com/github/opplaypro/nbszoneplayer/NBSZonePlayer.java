@@ -64,7 +64,12 @@ public final class NBSZonePlayer extends JavaPlugin {
         File songsFolder = new File(getDataFolder(), "songs");
 
         if  (!songsFolder.exists()) {
-            songsFolder.mkdirs();
+            boolean created = songsFolder.mkdirs();
+            if (created) {
+                getLogger().info("songs folder created!");
+            } else {
+                getLogger().warning("Could not create songs folder!");
+            }
         }
 
         ConfigurationSection regionSelection = getConfig().getConfigurationSection("regions");

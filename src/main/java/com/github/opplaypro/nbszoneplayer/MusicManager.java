@@ -35,7 +35,7 @@ public class MusicManager implements Listener {
 
         stopMusic(player);
 
-        List<String> songFileNames = playlist.getSongs();
+        List<String> songFileNames = playlist.songs();
         if (songFileNames.isEmpty()) {
             return;
         }
@@ -55,10 +55,10 @@ public class MusicManager implements Listener {
             return;
         }
 
-        List<String> songFileNames = playlist.getSongs();
+        List<String> songFileNames = playlist.songs();
         String songToPlay;
 
-        if (playlist.isShuffle()) {
+        if (playlist.shuffle()) {
             songToPlay = songFileNames.get(new Random().nextInt(songFileNames.size()));
         }  else {
             SongPlayer currentSp = activeSongPlayers.get(playerUUID);
@@ -70,7 +70,7 @@ public class MusicManager implements Listener {
                 int nextIndex = currentIndex + 1;
                 if (nextIndex >= songFileNames.size()) {
 
-                    if (playlist.isLoop()) {
+                    if (playlist.loop()) {
                         nextIndex = 0;
                     } else {
                         stopMusic(player);
