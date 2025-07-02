@@ -90,8 +90,9 @@ public class MusicManager implements Listener {
         songPlayer.setChannelMode(new MonoMode());
         songPlayer.addPlayer(player);
         songPlayer.setRepeatMode(RepeatMode.NO);
+        songPlayer.setVolume(playlist.volume());
 
-        activeSongPlayers.put(player.getUniqueId(), songPlayer);
+        activeSongPlayers.put(playerUUID, songPlayer);
         songPlayer.setPlaying(true);
         plugin.getLogger().info("Playing song " + songToPlay + " for " + player.getName());
     }
