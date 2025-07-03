@@ -151,7 +151,6 @@ public class MusicManager implements Listener {
             songPlayer.setPlaying(false);
             songPlayer.destroy();
             activeSongPlayers.remove(playerUUID);
-            plugin.getLogger().info("Stopping music for " + player.getName());
         }
         activePlaylists.remove(playerUUID);
     }
