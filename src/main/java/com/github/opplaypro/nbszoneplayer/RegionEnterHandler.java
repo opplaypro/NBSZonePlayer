@@ -65,17 +65,26 @@ public class RegionEnterHandler extends Handler {
 
             if (currentSongPlayer != null) {
 
+                MusicManager.PlaybackSource source = musicManager.getPlaybackSource(bukkitPlayer);
+
+                if (source == MusicManager.PlaybackSource.COMMAND) {
+                    return true;
+                }
                 String currentSongFileName = currentSongPlayer.getSong().getPath().getName();
 
                 if (!highestPriorityPlaylist.songs().contains(currentSongFileName)) {
                     musicManager.startPlaylist(bukkitPlayer, highestPriorityPlaylist);
                 }
+
             } else {
                 musicManager.startPlaylist(bukkitPlayer, highestPriorityPlaylist);
             }
         } else {
             if (currentSongPlayer != null) {
-                musicManager.stopMusic(bukkitPlayer);
+                MusicManager.PlaybackSource source = musicManager.getPlaybackSource(bukkitPlayer);
+                    if (source == MusicManager.PlaybackSource.REGION) {
+                        musicManager.stopMusic(bukkitPlayer);
+                    }
             }
         }
         return true;

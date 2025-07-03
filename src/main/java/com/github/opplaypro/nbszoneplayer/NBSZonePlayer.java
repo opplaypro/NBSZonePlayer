@@ -19,6 +19,7 @@ public final class NBSZonePlayer extends JavaPlugin {
     public void onEnable() {
         getLogger().info("Enabling NoteblockMusicPlayer");
 
+        // check for dependencies
         if (getServer().getPluginManager().getPlugin("WorldGuard") == null) {
             getLogger().severe("WorldGuard not installed!");
             getLogger().severe("Disabling NoteblockMusicPlayer");
@@ -32,6 +33,7 @@ public final class NBSZonePlayer extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
         getLogger().info("All dependencies found!");
 
         this.musicManager = new MusicManager(this);
@@ -39,23 +41,35 @@ public final class NBSZonePlayer extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(this.musicManager, this);
 
+        // get WorldGuadr session manager
         try {
             SessionManager sessionManager = WorldGuard.getInstance().getPlatform().getSessionManager();
-            sessionManager.registerHandler(new RegionEnterHandler.Factory(this), null);            getLogger().info("Region handler enabled!");
+            sessionManager.registerHandler(new RegionEnterHandler.Factory(this), null);
+            getLogger().info("Region handler enabled!");
         }
         catch (Exception e) {
-            getLogger().severe("SEVERE error, disabling NoteblockMusicPlayer");
-            getLogger().log(Level.SEVERE, "Encountered error [ERR:NP51]!", e);
+            getLogger().log(Level.SEVERE, "Encountered error!", e);
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
-        PluginCommand command = getCommand("nbszoneplayer");
-        if (command != null) {
-            command.setExecutor(new CommandManager(this));
-        } else {
-            getLogger().severe("cannot find command 'nbszoneplayer', check config.yml.");
+        CommandManager commandManager = new CommandManager(this);
+
+        PluginCommand reloadCommand = getCommand("reloadnbszoneplayer");
+        if (reloadCommand != null) {
+            reloadCommand.setExecutor(commandManager);
         }
+
+        PluginCommand playsongCommand = getCommand("playsong");
+        if (playsongCommand != null) {
+            playsongCommand.setExecutor(commandManager);
+        }
+
+        PluginCommand stopsongCommand = getCommand("stopsong");
+        if (stopsongCommand != null) {
+            stopsongCommand.setExecutor(commandManager);
+        }
+
 
         loadPlaylists();
         getLogger().info("NoteblockMusicPlayer successfully enabled!");

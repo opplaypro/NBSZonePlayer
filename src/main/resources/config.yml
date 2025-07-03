@@ -9,10 +9,11 @@ regions:
       # all *.nbs files must be in plugins/NoteblockMusicPlayer/songs
       - 'village.nbs'
       - 'ambient.nbs'
+    # true if you want to shuffle played songs (recommended true, default true)
+    # shuffle set to true ignores loop setting
+    shuffle: true
     # true if you want to loop through all songs (recommended true, default true)
     loop: true
-    # true if you want to shuffle played songs (recommended true, default true)
-    shuffle: true
     # playlist volume 0-100, integer only (default 100)
     volume: 100
 
