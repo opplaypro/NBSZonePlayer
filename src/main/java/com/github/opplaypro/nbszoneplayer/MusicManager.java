@@ -112,14 +112,14 @@ public class MusicManager implements Listener {
     @EventHandler
     public void onSongEnd(SongEndEvent event) {
         SongPlayer songPlayer = event.getSongPlayer();
-        if (!playbackSources.containsValue(PlaybackSource.REGION)) {
-            return;
-        }
         if (activeSongPlayers.containsValue(songPlayer)) {
             for (Map.Entry<UUID, SongPlayer> entry : activeSongPlayers.entrySet()) {
                 if (entry.getValue().equals(songPlayer)) {
                     Player player = Bukkit.getPlayer(entry.getKey());
                     if (player != null) {
+                        if (!playbackSources.get(player.getUniqueId()).equals(PlaybackSource.REGION)) {
+                            return;
+                        }
                         playNextSong(player);
                     }
                     break;
