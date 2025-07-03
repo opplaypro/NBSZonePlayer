@@ -1,12 +1,13 @@
 # Play your own music on minecraft servers!
 No need for players to install anything.
-Set playlists for each WorldGuard region seperately.
+Set playlists for each WorldGuard region separately.
 
 ## Features
 - Play noteblock (.nbs files) music on your server.
-- every region has it's own playlist.
+- every region has its own playlist.
 - Supports looping and shuffling.
 - Decide on each playlist's volume.
+- Play selected song to selected player manually,
 
 
 ## Instalation
