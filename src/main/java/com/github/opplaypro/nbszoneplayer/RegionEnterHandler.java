@@ -19,8 +19,6 @@ public class RegionEnterHandler extends Handler {
 
     private final NBSZonePlayer plugin;
 
-
-
     public RegionEnterHandler(Session session, NBSZonePlayer plugin) {
         super(session);
         this.plugin = plugin;

@@ -32,45 +32,57 @@ public class MusicManager implements Listener {
         this.plugin = plugin;
     }
 
+    // waht is the source of playback
     public enum PlaybackSource {
         REGION,
         COMMAND
     }
 
+    // start playlist (region playlist)
     public void startPlaylist(Player player, RegionPlaylist playlist) {
 
+        // stop previous playback
         stopMusic(player);
 
+        // list of all songs in region playlist
         List<String> songFileNames = playlist.songs();
+        // if no songs in region do not do anything
         if (songFileNames.isEmpty()) {
             return;
         }
 
+        // add player to active players
         playbackSources.put(player.getUniqueId(), PlaybackSource.REGION);
         activePlaylists.put(player.getUniqueId(), playlist);
 
+        // play song
         playNextSong(player);
-
-        plugin.getLogger().info("Starting music for " + player.getName());
     }
 
+    // plays next song in playlsit
     private void playNextSong(Player player) {
         UUID playerUUID = player.getUniqueId();
+        // works ONLY if currently is playing from region
         if (playbackSources.get(playerUUID) != PlaybackSource.REGION) {
             return;
         }
+        // get playlist
         RegionPlaylist playlist = activePlaylists.get(playerUUID);
 
+        // if no playlist found
         if (playlist == null) {
             return;
         }
 
+        // get list of songs
         List<String> songFileNames = playlist.songs();
         String songToPlay;
 
         if (playlist.shuffle()) {
+            // random song
             songToPlay = songFileNames.get(new Random().nextInt(songFileNames.size()));
         }  else {
+            // find next song in playlist
             SongPlayer currentSp = activeSongPlayers.get(playerUUID);
             if (currentSp == null) {
                 songToPlay = songFileNames.getFirst();
@@ -79,7 +91,7 @@ public class MusicManager implements Listener {
                 int currentIndex = songFileNames.indexOf(currentSongName);
                 int nextIndex = currentIndex + 1;
                 if (nextIndex >= songFileNames.size()) {
-
+                    // at the end of playlist
                     if (playlist.loop()) {
                         nextIndex = 0;
                     } else {
@@ -90,6 +102,7 @@ public class MusicManager implements Listener {
                 songToPlay = songFileNames.get(nextIndex);
             }
         }
+        // play music
         Song song = loadSong(songToPlay);
         if (song == null) {
             stopMusic(player);
@@ -106,9 +119,9 @@ public class MusicManager implements Listener {
         playbackSources.put(player.getUniqueId(), PlaybackSource.REGION);
 
         songPlayer.setPlaying(true);
-        plugin.getLogger().info("Playing song " + songToPlay + " for " + player.getName());
     }
 
+    // handle playing next song from playlist
     @EventHandler
     public void onSongEnd(SongEndEvent event) {
         SongPlayer songPlayer = event.getSongPlayer();
@@ -128,6 +141,7 @@ public class MusicManager implements Listener {
         }
     }
 
+    // stop playback
     public void stopMusic(Player player) {
 
         UUID playerUUID = player.getUniqueId();
@@ -170,6 +184,7 @@ public class MusicManager implements Listener {
         return song;
     }
 
+    // handles playing one song from /playsong command
     public boolean playSingleSong(Player player, String songFileName, byte volume) {
         UUID playerUUID = player.getUniqueId();
 
