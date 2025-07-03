@@ -37,7 +37,7 @@ public class CommandManager implements CommandExecutor {
     }
 
     private void handleReloadPlugin(CommandSender sender) {
-        if (!sender.hasPermission("nbsoneplayer.command.reload")) {
+        if (!sender.hasPermission("nbszoneplayer.command.reload")) {
             sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
             return;
         }
