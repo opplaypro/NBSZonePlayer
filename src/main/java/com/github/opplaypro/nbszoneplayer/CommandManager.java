@@ -25,7 +25,6 @@ public class CommandManager implements CommandExecutor {
             case "reloadnbszoneplayer":
                 handleReloadPlugin(sender);
                 break;
-
             case "playsong":
                 handlePlaysong(sender, label, args);
                 break;
@@ -49,7 +48,7 @@ public class CommandManager implements CommandExecutor {
 
     private void handlePlaysong(CommandSender sender, String label, String[] args) {
         MusicManager musicManager = plugin.getMusicManager();
-        if (!sender.hasPermission("nbsoneplayer.command.playsong")) {
+        if (!sender.hasPermission("nbszoneplayer.command.playsong")) {
             sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
             return;
         }
@@ -62,7 +61,7 @@ public class CommandManager implements CommandExecutor {
             if (sender instanceof Player) {
                 musicManager.playSingleSong((Player) sender, args[0], (byte) 100);
             } else {
-                sender.sendMessage(ChatColor.RED + "You must be specify a player to use this command.");
+                sender.sendMessage(ChatColor.RED + "You must be or specify a player to use this command.");
             }
             return;
         }
@@ -117,7 +116,7 @@ public class CommandManager implements CommandExecutor {
 
     private void handleStopSong(CommandSender sender, String label, String[] args) {
         MusicManager musicManager = plugin.getMusicManager();
-        if (!sender.hasPermission("nbsoneplayer.command.play")) {
+        if (!sender.hasPermission("nbszoneplayer.command.play")) {
             sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
             return;
         }
