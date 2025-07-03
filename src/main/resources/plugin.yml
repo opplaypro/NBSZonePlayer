@@ -8,10 +8,31 @@ depend:
   - WorldGuard
 api-version: 1.21
 
+permissions:
+  nbszoneplayer.command.reload:
+    description: 'allows reloading plugin'
+    default: op
+
+  nbszoneplayer.command.play:
+    description: 'allows for manual playback of songs'
+    default: op
+
 commands:
-  nbszoneplayer:
-    description: 'test'
-    usage: '/<command> reload'
-    aliases: [nbszp, nzp]
+  reloadnbszoneplayer:
+    description: 'Reload plugin config'
+    usage: '/<command>'
+    aliases: [reloadnbszp, reloadnzp]
     permission: nbszoneplayer.command.reload
+    permission-message: "§4You don't have  §c${permission}§4 permission to use this command!"
+
+  playsong:
+    description: 'play one song to specified player'
+    usage: '/<command> <song_name.nbs> [volume] [player]'
+    permission: nbszoneplayer.command.play
+    permission-message: "§4You don't have  §c${permission}§4 permission to use this command!"
+
+  stopsong:
+    description: 'stop playing song from /playsong command'
+    usage: '/<command> [player]'
+    permission: nbszoneplayer.command.play
     permission-message: "§4You don't have  §c${permission}§4 permission to use this command!"

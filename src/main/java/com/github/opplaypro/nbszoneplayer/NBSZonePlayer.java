@@ -50,12 +50,23 @@ public final class NBSZonePlayer extends JavaPlugin {
             return;
         }
 
-        PluginCommand command = getCommand("nbszoneplayer");
-        if (command != null) {
-            command.setExecutor(new CommandManager(this));
-        } else {
-            getLogger().severe("cannot find command 'nbszoneplayer', check config.yml.");
+        CommandManager commandManager = new CommandManager(this);
+
+        PluginCommand reloadCommand = getCommand("reloadnbszoneplayer");
+        if (reloadCommand != null) {
+            reloadCommand.setExecutor(commandManager);
         }
+
+        PluginCommand playsongCommand = getCommand("playsong");
+        if (playsongCommand != null) {
+            playsongCommand.setExecutor(commandManager);
+        }
+
+        PluginCommand stopsongCommand = getCommand("stopsong");
+        if (stopsongCommand != null) {
+            stopsongCommand.setExecutor(commandManager);
+        }
+
 
         loadPlaylists();
         getLogger().info("NoteblockMusicPlayer successfully enabled!");

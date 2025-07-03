@@ -26,9 +26,15 @@ public class MusicManager implements Listener {
     private final Map<String, Song> loadedSongs = new HashMap<>();
     private final Map<UUID, SongPlayer> activeSongPlayers = new HashMap<>();
     private final Map<UUID, RegionPlaylist> activePlaylists = new HashMap<>();
+    private final Map<UUID, PlaybackSource> playbackSources = new HashMap<>();
 
     public MusicManager(NBSZonePlayer plugin) {
         this.plugin = plugin;
+    }
+
+    public enum PlaybackSource {
+        REGION,
+        COMMAND
     }
 
     public void startPlaylist(Player player, RegionPlaylist playlist) {
@@ -40,6 +46,7 @@ public class MusicManager implements Listener {
             return;
         }
 
+        playbackSources.put(player.getUniqueId(), PlaybackSource.REGION);
         activePlaylists.put(player.getUniqueId(), playlist);
 
         playNextSong(player);
@@ -49,6 +56,9 @@ public class MusicManager implements Listener {
 
     private void playNextSong(Player player) {
         UUID playerUUID = player.getUniqueId();
+        if (playbackSources.get(playerUUID) != PlaybackSource.REGION) {
+            return;
+        }
         RegionPlaylist playlist = activePlaylists.get(playerUUID);
 
         if (playlist == null) {
@@ -93,6 +103,8 @@ public class MusicManager implements Listener {
         songPlayer.setVolume(playlist.volume());
 
         activeSongPlayers.put(playerUUID, songPlayer);
+        playbackSources.put(player.getUniqueId(), PlaybackSource.REGION);
+
         songPlayer.setPlaying(true);
         plugin.getLogger().info("Playing song " + songToPlay + " for " + player.getName());
     }
@@ -100,6 +112,9 @@ public class MusicManager implements Listener {
     @EventHandler
     public void onSongEnd(SongEndEvent event) {
         SongPlayer songPlayer = event.getSongPlayer();
+        if (!playbackSources.containsValue(PlaybackSource.REGION)) {
+            return;
+        }
         if (activeSongPlayers.containsValue(songPlayer)) {
             for (Map.Entry<UUID, SongPlayer> entry : activeSongPlayers.entrySet()) {
                 if (entry.getValue().equals(songPlayer)) {
@@ -154,7 +169,37 @@ public class MusicManager implements Listener {
 
         return song;
     }
+
+    public boolean playSingleSong(Player player, String songFileName, byte volume) {
+        UUID playerUUID = player.getUniqueId();
+
+        stopMusic(player);
+
+        Song song = loadSong(songFileName);
+        if (song == null) {
+            plugin.getLogger().warning("Could not find song file " + songFileName);
+            return false;
+        }
+
+        RadioSongPlayer songPlayer = new RadioSongPlayer(song);
+        songPlayer.setChannelMode(new MonoMode());
+        songPlayer.addPlayer(player);
+        songPlayer.setRepeatMode(RepeatMode.NO);
+        songPlayer.setVolume(volume);
+
+        activeSongPlayers.put(playerUUID, songPlayer);
+        playbackSources.put(playerUUID, PlaybackSource.COMMAND);
+
+        songPlayer.setPlaying(true);
+        plugin.getLogger().info("Forced playing song " + songFileName + " for " + player.getName());
+        return true;
+    }
+
     public SongPlayer getActiveSongPlayer(Player player) {
         return activeSongPlayers.get(player.getUniqueId());
     }
+    public PlaybackSource getPlaybackSource(Player player) {
+        return playbackSources.get(player.getUniqueId());
+    }
 }
+
